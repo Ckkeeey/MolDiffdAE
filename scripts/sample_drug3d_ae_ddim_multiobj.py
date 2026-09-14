@@ -171,7 +171,7 @@ def sample_from_template_conditioned_multi_ddim(data, model, mode='template', no
     if start_step is None:
         time_sequence = list(range(0, model.num_timesteps-stride, stride))
     else:
-        time_sequence = list(range(0, start_step, stride))
+        time_sequence = list(range(0, min(start_step, model.num_timesteps) - stride, stride))
         
     batch = Batch.from_data_list([data.clone() for _ in range(n_graphs)], follow_batch = ['halfedge_type','node_type']).to(device)
 
@@ -186,7 +186,6 @@ def sample_from_template_conditioned_multi_ddim(data, model, mode='template', no
     emb = model.encode(node_type, node_pos, batch_node,
             halfedge_type, halfedge_index, batch_halfedge,
             num_mol)
-    emb = emb.repeat_interleave(n_graphs,0)
     
     edge_index = torch.cat([halfedge_index, halfedge_index.flip(0)], dim=1)
     batch_edge = torch.cat([batch_halfedge, batch_halfedge], dim=0)
