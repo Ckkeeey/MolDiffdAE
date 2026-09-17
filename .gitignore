@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDE / editor
+*.swp
+*.swo
+*.swn
+.vscode/
+.idea/
+
+# Logs
+logs/
+*.log
+slurm-*.out
+slurm-*.log
+
+# Training outputs
+output/
+checkpoints/
+ckpt/
+
+# Local datasets
+data/geom_drug/
+data/__MACOSX/
+
+# Temporary files
+*.tmp
+*.bak
+.DS_Store
