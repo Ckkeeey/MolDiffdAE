@@ -154,10 +154,21 @@ if __name__ == '__main__':
             with open(save_path, 'wb') as f:
                 f.write(pickle.dumps(local3d))
         elif metric_name == 'validity':
-            validity = calculate_validity(
-                output_dir=os.path.dirname(df_path),
-                is_edm=('e3_diffusion_for_molecules' in args.result_root),
-            )
+            # Template sampler does not save samples_all.pt.
+            # Its generated PKL records one entry per source molecule,
+            # with an empty list indicating generation failure.
+            if exp_name.startswith('template-'):
+                pkl_path = os.path.join(
+                    args.result_root,
+                    exp_name + '.pkl'
+                )
+                validity = calculate_validity_from_generated_pkl(pkl_path)
+            else:
+                validity = calculate_validity(
+                    output_dir=os.path.dirname(df_path),
+                    is_edm=('e3_diffusion_for_molecules' in args.result_root),
+                )
+
             with open(df_path.replace('.csv', '_validity.pkl'), 'wb') as f:
                 f.write(pickle.dumps(validity))
             logger.info(f'Validity : {validity}')

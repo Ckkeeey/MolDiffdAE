@@ -1,4 +1,10 @@
+import pickle
+import torch
 from rdkit import Chem
+from rdkit.Chem import QED, Crippen, Lipinski, rdMolDescriptors
+from utils.sascorer import compute_sa_score
+from utils.scoring_func import obey_lipinski, get_basic, get_rdkit_rmsd
+
 import numpy as np
 from tqdm import tqdm
 #from .scoring_func import *
@@ -13,7 +19,7 @@ from collections import Counter
 from rdkit.Chem import Fragments as frag_func
 
 def get_drug_chem(mol):
-    qed_score = qed(mol)
+    qed_score = QED.qed(mol)
     sa_score = compute_sa_score(mol)
     logp_score = Crippen.MolLogP(mol)
     lipinski = obey_lipinski(mol)
@@ -43,8 +49,9 @@ def get_count_prop(mol):
 def get_global_3d(mol):
     try:
         rmsd_list = get_rdkit_rmsd(mol)
-    except:
+    except Exception as e:
         return {}
+
     return {
         'rmsd_max': rmsd_list[0],
         'rmsd_min': rmsd_list[1],
@@ -142,7 +149,7 @@ def get_metric(mols, metric, parallel=False):
         for mol in tqdm(mols):
             results.append(func(mol))
     else:
-        with Pool(102) as pool:
+        with Pool(8) as pool:
             results = list(tqdm(pool.imap(func, mols), total=len(mols), desc=f'eval {metric}'))
     
     # fix empty dict
@@ -357,7 +364,7 @@ def calculate_validity(output_dir, is_edm):
         for mol in pool['failed']:
             try:
                 Chem.SanitizeMol(mol)
-            except:
+            except Exception as e:
                 n_invalid += 1
                 continue
             # validate molecule
@@ -368,6 +375,46 @@ def calculate_validity(output_dir, is_edm):
     validity = (n_success + n_disconnect) / (n_success + n_invalid + n_disconnect)
     connectivity = n_success / (n_success + n_disconnect)
     return {'validity': validity, 'connectivity': connectivity}
+
+
+def calculate_validity_from_generated_pkl(pkl_path):
+    """
+    Calculate validity/connectivity for template sampler outputs.
+
+    The template sampler saves:
+        gen_dict[source_id] = mol_list
+
+    An empty mol_list means generation failed for that source.
+    A non-empty mol_list contains reconstructed molecules that already
+    passed the sampler's SMILES/disconnection filtering.
+    """
+    with open(pkl_path, 'rb') as f:
+        gen_dict = pickle.load(f)
+
+    n_total = len(gen_dict)
+    n_success = sum(
+        1 for mol_list in gen_dict.values()
+        if len(mol_list) > 0
+    )
+    n_failed = n_total - n_success
+
+    validity = (
+        n_success / n_total
+        if n_total > 0 else 0.0
+    )
+
+    # The template sampler filters disconnected molecules before
+    # saving the generated PKL, so true connectivity cannot be
+    # recovered from this PKL alone.
+    connectivity = None
+
+    return {
+        'validity': validity,
+        'connectivity': connectivity,
+        'n_total': n_total,
+        'n_success': n_success,
+        'n_failed': n_failed,
+    }
 
 
 class RingAnalyzer(object):
