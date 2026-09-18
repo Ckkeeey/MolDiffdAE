@@ -1,0 +1,85 @@
+MolDiffdAE Template-Drug3D Evaluation
+============================================================
+
+Experiment
+---------
+exp_name: template-drug3d_ddim-999-deterministic_test
+dataset: drug3d
+sampling: DDIM deterministic
+
+Generation
+----------
+source molecules: 100
+successful generations: 94
+failed generations: 6
+validity: 0.940000
+connectivity: None (not recoverable from the saved template PKL because disconnected molecules were filtered before saving)
+
+Per-molecule metric summary
+--------------------------
+
+[Drug chemistry]
+qed: mean=0.653873, std=0.179007, median=0.688572, min=0.183123, max=0.930906
+sa: mean=0.824149, std=0.077020, median=0.850000, min=0.530000, max=0.940000
+logp: mean=2.889116, std=1.410469, median=2.995730, min=-0.707900, max=6.080360
+lipinski: mean=4.946809, std=0.269089, median=5.000000, min=3.000000, max=5.000000
+
+[Count properties]
+n_atoms: mean=25.265957, std=5.360500, median=25.000000, min=17.000000, max=45.000000
+n_bonds: mean=27.244681, std=6.020907, median=27.000000, min=18.000000, max=48.000000
+n_rings: mean=2.978723, std=0.994379, median=3.000000, min=1.000000, max=6.000000
+n_rotatable: mean=5.170213, std=2.746017, median=5.000000, min=1.000000, max=18.000000
+weight: mean=358.014931, std=74.697143, median=354.621345, min=226.110613, max=620.441390
+n_hacc: mean=4.755319, std=1.630925, median=5.000000, min=1.000000, max=9.000000
+n_hdon: mean=1.361702, std=0.982109, median=1.000000, min=0.000000, max=4.000000
+
+[Global 3D / RMSD]
+rmsd_max: mean=2.851661, std=1.076074, median=2.744727, min=0.894699, max=6.416757
+rmsd_min: mean=1.023118, std=0.622708, median=0.867451, min=0.081089, max=2.968942
+rmsd_median: mean=2.190840, std=0.900432, median=2.092115, min=0.621214, max=5.208692
+
+[Fragment counts]
+cnt_eleC: mean=18.446809, std=4.507144, median=18.000000, min=10.000000, max=36.000000
+cnt_eleN: mean=2.808511, std=1.330184, median=3.000000, min=0.000000, max=8.000000
+cnt_eleO: mean=3.106383, std=1.555207, median=3.000000, min=0.000000, max=7.000000
+cnt_eleF: mean=0.191489, std=0.591637, median=0.000000, min=0.000000, max=3.000000
+cnt_eleP: mean=0.000000, std=0.000000, median=0.000000, min=0.000000, max=0.000000
+cnt_eleS: mean=0.510638, std=0.581889, median=0.000000, min=0.000000, max=2.000000
+cnt_eleCl: mean=0.202128, std=0.578834, median=0.000000, min=0.000000, max=3.000000
+cnt_bond1: mean=12.500000, std=4.987619, median=12.500000, min=3.000000, max=34.000000
+cnt_bond2: mean=2.117021, std=1.208005, median=2.000000, min=0.000000, max=5.000000
+cnt_bond3: mean=0.053191, std=0.225618, median=0.000000, min=0.000000, max=1.000000
+cnt_bond4: mean=12.574468, std=6.006250, median=12.000000, min=0.000000, max=27.000000
+cnt_ring3: mean=0.021277, std=0.145079, median=0.000000, min=0.000000, max=1.000000
+cnt_ring4: mean=0.000000, std=0.000000, median=0.000000, min=0.000000, max=0.000000
+cnt_ring5: mean=0.744681, std=0.775099, median=1.000000, min=0.000000, max=3.000000
+cnt_ring6: mean=2.191489, std=0.919053, median=2.000000, min=0.000000, max=5.000000
+cnt_ring7: mean=0.021277, std=0.145079, median=0.000000, min=0.000000, max=1.000000
+cnt_ring8: mean=0.000000, std=0.000000, median=0.000000, min=0.000000, max=0.000000
+cnt_ring9: mean=0.000000, std=0.000000, median=0.000000, min=0.000000, max=0.000000
+
+Similarity
+----------
+novelty: 1.0
+uniqueness: 1.0
+diversity: 0.7344085708279413
+sim_with_val: 0.8594590731370539
+
+Ring type frequency
+------------------
+c1ccccc1: 138
+c1ccoc1: 14
+C1CCCCC1: 10
+c1cncnc1: 9
+C1CNCCN1: 8
+c1ccncc1: 8
+C1COCCN1: 7
+C1CNCN1: 6
+c1cnoc1: 5
+c1nncn1: 5
+
+Local 3D
+--------
+lengths: 20 entries
+angles: 13 entries
+dihedral: 15 entries
